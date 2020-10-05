@@ -26,15 +26,36 @@
     "help": "nx help"
   },
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@nrwl/nx-plugin": "^10.3.0",
+    "@scalecube/api": "^0.2.9",
+    "@scalecube/browser": "^0.2.9",
+    "@scalecube/node": "^0.2.9",
+    "@scalecube/rsocket-ws-gateway": "^0.2.9",
+    "document-register-element": "1.13.1",
+    "rxjs": "^6.6.3"
+  },
   "devDependencies": {
+    "@nrwl/cypress": "10.3.0",
+    "@nrwl/eslint-plugin-nx": "10.2.1",
+    "@nrwl/jest": "10.2.1",
+    "@nrwl/node": "10.2.1",
+    "@nrwl/web": "10.3.0",
     "@nrwl/workspace": "10.2.1",
+    "@types/jest": "26.0.8",
     "@types/node": "~8.9.4",
+    "@typescript-eslint/eslint-plugin": "2.19.2",
+    "@typescript-eslint/parser": "2.19.2",
+    "cypress": "^4.1.0",
     "dotenv": "6.2.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.0.0",
+    "eslint-plugin-cypress": "^2.10.3",
+    "jest": "26.2.2",
+    "prettier": "2.0.4",
+    "ts-jest": "26.1.4",
     "ts-node": "~7.0.0",
     "tslint": "~6.0.0",
-    "eslint": "6.8.0",
-    "typescript": "~3.9.3",
-    "prettier": "2.0.4"
+    "typescript": "~3.9.3"
   }
 }

@@ -21,5 +21,25 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "chat-service": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
+    },
+    "chat-service-fe": {
+      "tags": []
+    },
+    "standalone-server": {
+      "tags": []
+    },
+    "chat-client": {
+      "tags": []
+    },
+    "chat-client-e2e": {
+      "tags": [],
+      "implicitDependencies": ["chat-client"]
+    }
+  }
 }

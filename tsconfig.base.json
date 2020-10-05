@@ -15,7 +15,16 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@scalecube-chat-example/chat-service": [
+        "libs/chat-service/src/index.ts"
+      ],
+      "@scalecube-chat-example/api": ["libs/api/src/index.ts"],
+      "@scalecube-chat-example/chat-service-fe": [
+        "libs/chat-service-fe/src/index.ts"
+      ],
+      "@scalecube-chat-example/nx-vanilla": ["libs/vanilla/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

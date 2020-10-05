@@ -1,7 +1,247 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "chat-service": {
+      "root": "libs/chat-service",
+      "sourceRoot": "libs/chat-service/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/chat-service/tsconfig.lib.json",
+              "libs/chat-service/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/chat-service/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/chat-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "libs/api",
+      "sourceRoot": "libs/api/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/api/tsconfig.lib.json",
+              "libs/api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "chat-service-fe": {
+      "root": "libs/chat-service-fe",
+      "sourceRoot": "libs/chat-service-fe/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/chat-service-fe/tsconfig.lib.json",
+              "libs/chat-service-fe/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/chat-service-fe/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/chat-service-fe/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "standalone-server": {
+      "root": "apps/standalone-server",
+      "sourceRoot": "apps/standalone-server/src",
+      "projectType": "application",
+      "prefix": "standalone-server",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/standalone-server",
+            "main": "apps/standalone-server/src/main.ts",
+            "tsConfig": "apps/standalone-server/tsconfig.app.json",
+            "assets": ["apps/standalone-server/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/standalone-server/src/environments/environment.ts",
+                  "with": "apps/standalone-server/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "standalone-server:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/standalone-server/tsconfig.app.json",
+              "apps/standalone-server/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/standalone-server/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/standalone-server/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "chat-client": {
+      "root": "apps/chat-client",
+      "sourceRoot": "apps/chat-client/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/chat-client",
+            "index": "apps/chat-client/src/index.html",
+            "main": "apps/chat-client/src/main.ts",
+            "polyfills": "apps/chat-client/src/polyfills.ts",
+            "tsConfig": "apps/chat-client/tsconfig.app.json",
+            "assets": [
+              "apps/chat-client/src/favicon.ico",
+              "apps/chat-client/src/assets"
+            ],
+            "styles": ["apps/chat-client/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/chat-client/src/environments/environment.ts",
+                  "with": "apps/chat-client/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "chat-client:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "chat-client:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/chat-client/tsconfig.app.json",
+              "apps/chat-client/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/chat-client/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/chat-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "chat-client-e2e": {
+      "root": "apps/chat-client-e2e",
+      "sourceRoot": "apps/chat-client-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/chat-client-e2e/cypress.json",
+            "tsConfig": "apps/chat-client-e2e/tsconfig.e2e.json",
+            "devServerTarget": "chat-client:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "chat-client:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": ["apps/chat-client-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/chat-client-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/node"
+  },
+  "defaultProject": "chat-client"
 }
