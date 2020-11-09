@@ -1,37 +1,47 @@
 import {ChatServiceAPI} from '@scalecube-chat-example/api';
 import { Subject, from, concat } from 'rxjs';
 import {filter} from "rxjs/operators";
-const channels: ChatServiceAPI.Channel[] = [];
-const channels$ = new Subject<ChatServiceAPI.Channel>();
-const messages: {[ch:string]: {ts: number, message: string}[]} = {};
-const messages$: {[ch:string]: Subject<{ts: number, message: string}>} = {};
+import {Message} from "../../api/src/ChatService";
+import {Dal, factory} from "./dal";
+
+const defaultOptions = {
+  storage: {
+    driver: "inmemory",
+    options: {}
+  }
+}
 export class ChatService implements ChatServiceAPI.ChatService{
-    async createChannel(req: ChatServiceAPI.CreateChannelRequest){
-        const ch = {
-            id: `${Date.now()}-${Math.random()}`,
-            topic: req.topic
-        }
-        messages[ch.id] = [];
-        messages$[ch.id] = new Subject();
-        channels.push(ch);
-        channels$.next(ch)
-        return { id: ch.id };
+  channels: ChatServiceAPI.Channel[] = [];
+  channelsSubject$ = new Subject<ChatServiceAPI.Channel>();
+  messages: { [ch: string]: Message[] } = {};
+  messagesSubject$: { [ch: string]: Subject<Message> } = {};
+  conn: Dal;
+  public static async build(buildOptions?: any){
+    const conn = await factory(buildOptions.storage || defaultOptions.storage)
+    return new ChatService({conn});
+  }
+  constructor(options?: any) {
+    this.conn = options.conn;
+  }
+  async createChannel(req: ChatServiceAPI.CreateChannelRequest){
+    const ch = {
+      id: `${Date.now()}-${Math.random()}`,
+      topic: req.topic
     }
-    channels$(_: ChatServiceAPI.Channels$Request){
-        return concat(from(channels), channels$);
-    }
-    async message(req: ChatServiceAPI.MessageRequest){
-        messages[req.header.channel].push({
-            ts: req.header.timestamp,
-            message: req.message
-        });
-        messages$[req.header.channel].next({
-            ts: req.header.timestamp,
-            message: req.message
-        });
-    }
-    messages$(req: ChatServiceAPI.Messages$Request){
-        return concat(from(messages[req.channel]), messages$[req.channel])
-            .pipe(filter(i => !req.from || i.ts > req.from));
-    }
+    this.messages[ch.id] = [];
+    this.messagesSubject$[ch.id] = new Subject();
+    await this.conn.createTopic(ch.topic, ch.id);
+    return { id: ch.id };
+  }
+  channels$(_: ChatServiceAPI.Channels$Request){
+    return this.conn.topics$();
+  }
+  async message(req: ChatServiceAPI.MessageRequest){
+    this.messages[req.header.channel].push(req);
+    this.messagesSubject$[req.header.channel].next(req);
+  }
+  messages$(req: ChatServiceAPI.Messages$Request){
+    return concat(from(this.messages[req.channel]), this.messagesSubject$[req.channel])
+      .pipe(filter(i => !req.from || i.header.timestamp > req.from));
+  }
 }

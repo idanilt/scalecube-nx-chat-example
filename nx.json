@@ -40,6 +40,9 @@
     "chat-client-e2e": {
       "tags": [],
       "implicitDependencies": ["chat-client"]
+    },
+    "topic-router": {
+      "tags": []
     }
   }
 }

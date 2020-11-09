@@ -13,13 +13,19 @@ export type CreateChannelResponse = Promise<{
 export interface Channels$Request {
 }
 
-export interface MessageRequest {
-    header: {
-        channel: string,
-        timestamp: number,
-        type: string
-    },
-    message: string
+export interface Message {
+  header: {
+    channel: string,
+    timestamp: number,
+    type: string,
+    nodeId?:number,
+    msgId?:string,
+  },
+  message: string
+}
+
+export interface MessageRequest extends Message{
+
 }
 
 export type MessageResponse = void;
@@ -33,5 +39,5 @@ export interface ChatService {
     createChannel(req: CreateChannelRequest): CreateChannelResponse;
     message(req: MessageRequest): MessageResponse;
     channels$(req: Channels$Request): Observable<Channel>;
-    messages$(req: Messages$Request): Observable<{ ts: number, message: string }>;
+    messages$(req: Messages$Request): Observable<Message>;
 }
