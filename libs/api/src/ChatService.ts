@@ -14,7 +14,7 @@ export interface Channels$Request {
 }
 
 export interface Message {
-  header: {
+  header?: {
     channel: string,
     timestamp: number,
     type: string,

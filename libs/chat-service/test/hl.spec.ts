@@ -18,6 +18,7 @@ describe("High Availability test suite", () => {
     const getMyChannel = ({ service }, name) =>
       (service as ChatService).channels$({})
         .pipe(
+          // tap(console.log),
           filter( i => i.topic === "myChannel"),
           map(_ => name)
         );

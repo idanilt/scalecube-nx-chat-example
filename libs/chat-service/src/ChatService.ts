@@ -1,8 +1,5 @@
 import {ChatServiceAPI} from '@scalecube-chat-example/api';
-import { Subject, from, concat } from 'rxjs';
-import {filter} from "rxjs/operators";
-import {Message} from "../../api/src/ChatService";
-import {Dal, factory} from "./dal";
+import {Dal, factory} from "./dal/dal";
 
 const defaultOptions = {
   storage: {
@@ -11,10 +8,6 @@ const defaultOptions = {
   }
 }
 export class ChatService implements ChatServiceAPI.ChatService{
-  channels: ChatServiceAPI.Channel[] = [];
-  channelsSubject$ = new Subject<ChatServiceAPI.Channel>();
-  messages: { [ch: string]: Message[] } = {};
-  messagesSubject$: { [ch: string]: Subject<Message> } = {};
   conn: Dal;
   public static async build(buildOptions?: any){
     const conn = await factory(buildOptions.storage || defaultOptions.storage)
@@ -28,8 +21,6 @@ export class ChatService implements ChatServiceAPI.ChatService{
       id: `${Date.now()}-${Math.random()}`,
       topic: req.topic
     }
-    this.messages[ch.id] = [];
-    this.messagesSubject$[ch.id] = new Subject();
     await this.conn.createTopic(ch.topic, ch.id);
     return { id: ch.id };
   }
@@ -37,11 +28,9 @@ export class ChatService implements ChatServiceAPI.ChatService{
     return this.conn.topics$();
   }
   async message(req: ChatServiceAPI.MessageRequest){
-    this.messages[req.header.channel].push(req);
-    this.messagesSubject$[req.header.channel].next(req);
+    await this.conn.createMessage(req.header.channel, req.message)
   }
   messages$(req: ChatServiceAPI.Messages$Request){
-    return concat(from(this.messages[req.channel]), this.messagesSubject$[req.channel])
-      .pipe(filter(i => !req.from || i.header.timestamp > req.from));
+    return this.conn.messages$(req.channel);
   }
 }
