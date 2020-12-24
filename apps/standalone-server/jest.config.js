@@ -6,9 +6,10 @@ module.exports = {
       tsConfig: '<rootDir>/tsconfig.spec.json',
     }
   },
+  testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$':  'ts-jest' 
+    '^.+\\.[tj]s$':  'ts-jest'
   },
-    moduleFileExtensions: ['ts', 'js', 'html'],
+    moduleFileExtensions: ['ts', 'js', 'html', 'node'],
   coverageDirectory: '../../coverage/apps/standalone-server'
 };

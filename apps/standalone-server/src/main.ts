@@ -1,23 +1,15 @@
-console.log('Hello World!');
-import {createMicroservice} from '@scalecube/node';
-import {ChatServiceDefinition} from '@scalecube-chat-example/api';
-import {ChatService} from '@scalecube-chat-example/chat-service';
-import Gateway from '@scalecube/rsocket-ws-gateway';
+import {bootstrap} from "./app/boostrap";
 
-const chatService = new ChatService();
+console.log("Starting standalone chat server on port 8000");
+(async function(){
+  try {
+    await bootstrap();
+  } catch (e) {
+    console.error("Server failed with", e)
+  }
 
-// Create a service
-const ms = createMicroservice({
-  debug: true,
-  services: [
-    {
-      definition: ChatServiceDefinition,
-      reference: chatService
-    }
-  ],
-});
+})();
 
-const serviceCall = ms.createServiceCall({});
 
-const gateway = new Gateway({ port: 8000 });
-gateway.start({ serviceCall });
+
+

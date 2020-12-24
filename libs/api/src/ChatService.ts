@@ -28,7 +28,7 @@ export interface MessageRequest extends Message{
 
 }
 
-export type MessageResponse = void;
+export type MessageResponse = Promise<void>;
 
 export interface Messages$Request {
     channel: string;

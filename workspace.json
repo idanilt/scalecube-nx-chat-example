@@ -264,6 +264,42 @@
           }
         }
       }
+    },
+    "leader-service": {
+      "root": "libs/leader-service",
+      "sourceRoot": "libs/leader-service/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/leader-service/tsconfig.lib.json",
+              "libs/leader-service/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/leader-service/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/leader-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/leader-service",
+            "tsConfig": "libs/leader-service/tsconfig.lib.json",
+            "packageJson": "libs/leader-service/package.json",
+            "main": "libs/leader-service/src/index.ts",
+            "assets": ["libs/leader-service/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

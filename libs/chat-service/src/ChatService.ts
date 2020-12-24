@@ -1,5 +1,6 @@
 import {ChatServiceAPI} from '@scalecube-chat-example/api';
 import {Dal, factory} from "./dal/dal";
+import {filter} from "rxjs/operators";
 
 const defaultOptions = {
   storage: {
@@ -10,7 +11,7 @@ const defaultOptions = {
 export class ChatService implements ChatServiceAPI.ChatService{
   conn: Dal;
   public static async build(buildOptions?: any){
-    const conn = await factory(buildOptions.storage || defaultOptions.storage)
+    const conn = await factory(buildOptions ? buildOptions.storage || defaultOptions.storage : defaultOptions.storage);
     return new ChatService({conn});
   }
   constructor(options?: any) {
@@ -31,6 +32,7 @@ export class ChatService implements ChatServiceAPI.ChatService{
     await this.conn.createMessage(req.header.channel, req.message)
   }
   messages$(req: ChatServiceAPI.Messages$Request){
-    return this.conn.messages$(req.channel);
+    return this.conn.messages$(req.channel)
+      .pipe(filter(i => !req.from || i.header.timestamp > req.from));
   }
 }

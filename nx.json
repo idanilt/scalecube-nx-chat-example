@@ -43,6 +43,9 @@
     },
     "topic-router": {
       "tags": []
+    },
+    "leader-service": {
+      "tags": []
     }
   }
 }

@@ -24,7 +24,12 @@
         "libs/chat-service-fe/src/index.ts"
       ],
       "@scalecube-chat-example/nx-vanilla": ["libs/vanilla/src/index.ts"],
-      "@scalecube-chat-example/topic-router": ["libs/topic-router/src/index.ts"]
+      "@scalecube-chat-example/topic-router": [
+        "libs/topic-router/src/index.ts"
+      ],
+      "@scalecube-chat-example/leader-service": [
+        "libs/leader-service/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

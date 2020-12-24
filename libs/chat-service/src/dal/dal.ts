@@ -8,6 +8,7 @@ export interface Dal {
 }
 
 export async function factory(options){
+
   const dep = await import(`./drivers/dal_${options.driver}.ts`);
   return new dep[`Dal_${options.driver}`](options.options);
 }

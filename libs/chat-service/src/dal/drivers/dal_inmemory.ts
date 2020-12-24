@@ -25,11 +25,11 @@ export class Dal_inmemory implements Dal {
     return concat(from(this.channels), this.channelsSubject$);
   }
   async createMessage(channel: string, message: string){
-    this.messages[channel].push({message});
-    this.messagesSubject$[channel].next({message});
+    const msg = {message, header: {channel, timestamp:Date.now(), type: "text"}};
+    this.messages[channel].push(msg);
+    this.messagesSubject$[channel].next(msg);
   }
   messages$(channel){
     return concat(from(this.messages[channel]), this.messagesSubject$[channel]);
-      //.pipe(filter(i => !req.from || i.header.timestamp > req.from));
   }
 }
