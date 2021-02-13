@@ -1,6 +1,7 @@
-import {createRaft, RaftDefinition} from "./RaftState";
+import {createRaft} from "./RaftState";
 import {RPC} from "./RPC";
 import {createMicroservice} from "@scalecube/node";
+import {leaderDef} from "@scalecube-chat-example/leader-service";
 
 describe("RPC Unit", () => {
   test("RPC full cycle", async () => {
@@ -26,7 +27,7 @@ describe("RPC Unit", () => {
     const seed = createMicroservice({
       address: {
         host: "localhost",
-        path: "/",
+        path: "",
         port: 10040,
         protocol: "ws"
       },
@@ -49,19 +50,19 @@ describe("RPC Unit", () => {
       ],
       address: {
         host: "localhost",
-        path: "/",
+        path: "",
         port: 10041,
         protocol: "ws"
       },
       seedAddress: {
         host: "localhost",
-        path: "/",
+        path: "",
         port: 10040,
         protocol: "ws"
       },
       debug: true
     });
-    const p: RPC = seed.createProxy({serviceDefinition: RaftDefinition});
+    const p: RPC = seed.createProxy({serviceDefinition: leaderDef});
 
     setTimeout(async () => {
       const res = await p.stat();

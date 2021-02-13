@@ -10,16 +10,6 @@ export interface RaftState {
   termVote: Set<number>;
 }
 
-export const RaftDefinition: ServiceDefinition = {
-  serviceName: "LeaderService",
-  methods: {
-    requestVote: {asyncModel: "requestResponse"},
-    heartBeat: {asyncModel: "requestResponse"},
-    request: {asyncModel: "requestResponse"},
-    stat: {asyncModel: "requestResponse"},
-  }
-};
-
 export const createRaft = () => ({
   node: Date.now() + "_" + Math.random(),
   machine$: new ReplaySubject<"follower" | "candidate" | "leader">(1),
